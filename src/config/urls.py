@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.views.decorators.cache import never_cache
 from django.views.static import serve
 
-from config import settings
+from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
