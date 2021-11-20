@@ -10,7 +10,7 @@
 
 
 <div class="card">
-    <form action="" method="get" class="card-header">
+    <form action="{% url 'product:list.product' %}" method="get" class="card-header">
         <div class="form-row justify-content-between">
             <div class="col-md-2">
                 <input type="text" name="title" placeholder="Product Title" class="form-control">
@@ -57,19 +57,21 @@
                 <tbody>
                 {% for product in products %}
                 <tr>
-                    <td>1</td>
-                    <td>T-Shirt <br> Created at : 25-Aug-2020</td>
-                    <td>Quality product in low cost</td>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.title|truncatechars:20 }} <br> Created at : {{ product.created_at }}</td>
+                    <td>{{ product.description|truncatechars:30 }}</td>
                     <td>
                         <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
 
                             <dt class="col-sm-3 pb-0">
-                                SM/ Red/ V-Nick
+                                {% for p in product.productvariant_set.all %}
+                                    <span>{{ p.variant_title }}</span>
+                                {% endfor %}
                             </dt>
                             <dd class="col-sm-9">
                                 <dl class="row mb-0">
-                                    <dt class="col-sm-4 pb-0">Price : 200.0</dt>
-                                    <dd class="col-sm-8 pb-0">InStock : 50.</dd>
+                                    <dt class="col-sm-4 pb-0">Price : {{ product.productvariantprice_set.first.price }}</dt>
+                                    <dd class="col-sm-8 pb-0">InStock : {{ product.productvariantprice_set.first.stock }}</dd>
                                 </dl>
                             </dd>
                         </dl>
@@ -82,6 +84,7 @@
                         </div>
                     </td>
                 </tr>
+                {% endfor %}
                 </tbody>
 
             </table>
@@ -89,13 +92,33 @@
 
     </div>
 
-    <div class="card-footer">
+    <div class="card-footer">চ
         <div class="row justify-content-between">
             <div class="col-md-6">
-                <p>Showing 1 to 10 out of 100</p>
+                <p>Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} out of {{ page_obj.paginator.count }}</p>
             </div>
             <div class="col-md-2">
+                {% if is_paginated %}
+                        {% if page_obj %}
+<!--                            {% if page_obj.has_previous %}-->
+<!--                                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>-->
+<!--                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>-->
+<!--                            {% endif %}-->
 
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3'%}
+                                    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+<!--                            {% if page_obj.has_next %}-->
+<!--                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>-->
+<!--                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>-->
+<!--                            {% endif %}-->
+                        {% endif %}
+                    {% endif %}
             </div>
         </div>
     </div>
