@@ -6,7 +6,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from product.models import Variant, Product, ProductVariant
-from ..serializers import ProductSerializer
+from ..serializers import ProductSerializer, ProductVariantSerializer
 
 
 class CreateProductView(generic.TemplateView):
@@ -18,15 +18,6 @@ class CreateProductView(generic.TemplateView):
         context['product'] = True
         context['variants'] = list(variants.all())
         return context
-    #
-    # def post(self, request, *args, **kwargs):
-    #     # form = BookCreateForm(request.POST)
-    #     # if form.is_valid():
-    #     #     book = form.save()
-    #     #     book.save()
-    #     #     return HttpResponseRedirect(reverse_lazy('books:detail', args=[book.id]))
-    #     # return render(request, 'books/book-create.html', {'form': form})
-    #     print(request)
 
 
 class ProductListView(generic.ListView):
@@ -64,4 +55,3 @@ class ProductListView(generic.ListView):
 class ProductCreateView(generics.ListCreateAPIView):
 
     serializer_class = ProductSerializer
-

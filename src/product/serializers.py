@@ -15,12 +15,20 @@ class VariantSerializer(serializers.ModelSerializer):
 
 
 class ProductVariantSerializer(serializers.ModelSerializer):
+    variant = VariantSerializer(many=True)
+    product = ProductSerializer
+
     class Meta:
         model = ProductVariant
         fields = ['variant_title']
 
 
 class ProductVariantPriceSerializer(serializers.ModelSerializer):
+    product = ProductSerializer
+    product_variant_one = ProductVariantSerializer
+    product_variant_two = ProductVariantSerializer
+    product_variant_three = ProductVariantSerializer
+
     class Meta:
         model = ProductVariantPrice
         fields = ['price', 'stock']
