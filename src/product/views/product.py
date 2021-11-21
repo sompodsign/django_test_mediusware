@@ -1,4 +1,5 @@
 from django.views import generic
+from django.db.models import Q
 from django.shortcuts import render
 
 from product.models import Variant, Product
@@ -23,11 +24,19 @@ class ProductListView(generic.ListView):
     ordering = ['-price']
 
     def get_queryset(self):
+        products = Product.objects.all()
         title = self.request.GET.get('title', '')
+        variant = self.request.GET.get('variant', '')
         price_from = self.request.GET.get('price_from', 0)
-        price_to = self.request.GET.get('price_to', 100000000)
-        new_context = Product.objects.filter(
-            title__icontains=title,
-            productvariantprice__price__lt=price_from,
-        )
-        return new_context
+        price_to = self.request.GET.get('price_to', 999999999)
+        date = self.request.GET.get('date', '')
+        if title:
+            products = products.filter(title__icontains=title)
+        elif price_from and price_to:
+            products = products.filter(productvariantprice__price__range=(price_from, price_to))
+        elif variant:
+            products = products.filter(produtvariant__eq='red')
+        elif date:
+            products = products.filter(created_at__gte=date)
+            return products
+        return products
