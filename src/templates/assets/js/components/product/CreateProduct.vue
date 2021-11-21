@@ -90,7 +90,6 @@
         </div>
       </div>
     </div>
-
     <button @click="saveProduct" type="submit" class="btn btn-lg btn-primary">Save</button>
     <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
   </section>
@@ -100,6 +99,7 @@
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import InputTag from 'vue-input-tag'
+import api from '../../api'
 
 export default {
   components: {
@@ -138,8 +138,8 @@ export default {
     newVariant() {
       let all_variants = this.variants.map(el => el.id)
       let selected_variants = this.product_variant.map(el => el.option);
-      let available_variants = all_variants.filter(entry1 => !selected_variants.some(entry2 => entry1 == entry2))
-      // console.log(available_variants)
+      let available_variants = all_variants.filter(entry1 => !selected_variants.some(entry2 => entry1 === entry2))
+      console.log(available_variants)
 
       this.product_variant.push({
         option: available_variants[0],
@@ -171,10 +171,9 @@ export default {
         return pre;
       }
       let self = this;
-      let ans = arr[0].reduce(function (ans, value) {
+      return arr[0].reduce(function (ans, value) {
         return ans.concat(self.getCombn(arr.slice(1), pre + value + '/'));
       }, []);
-      return ans;
     },
 
     // store product into database
@@ -189,7 +188,7 @@ export default {
       }
 
 
-      axios.post('/product', product).then(response => {
+      api.post('/product', product).then(response => {
         console.log(response.data);
       }).catch(error => {
         console.log(error);

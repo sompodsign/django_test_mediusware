@@ -1,8 +1,10 @@
 from django.views import generic
 from django.db.models import Q
 from django.shortcuts import render
+from rest_framework.decorators import APIView
+from rest_framework.response import Response
 
-from product.models import Variant, Product
+from product.models import Variant, Product, ProductVariant
 
 
 class CreateProductView(generic.TemplateView):
@@ -14,6 +16,15 @@ class CreateProductView(generic.TemplateView):
         context['product'] = True
         context['variants'] = list(variants.all())
         return context
+    #
+    # def post(self, request, *args, **kwargs):
+    #     # form = BookCreateForm(request.POST)
+    #     # if form.is_valid():
+    #     #     book = form.save()
+    #     #     book.save()
+    #     #     return HttpResponseRedirect(reverse_lazy('books:detail', args=[book.id]))
+    #     # return render(request, 'books/book-create.html', {'form': form})
+    #     print(request)
 
 
 class ProductListView(generic.ListView):
@@ -41,3 +52,14 @@ class ProductListView(generic.ListView):
             return products
         return products
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['variants'] = Variant.objects.all()
+        context['colors'] = ProductVariant.objects.filter()
+        return context
+
+
+class ProductCreateView(APIView):
+    def post(self, request):
+        print('sompod')
+        return Response(self.request.body)
