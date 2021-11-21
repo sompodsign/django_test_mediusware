@@ -53,5 +53,14 @@ class ProductListView(generic.ListView):
 
 
 class ProductCreateView(generics.ListCreateAPIView):
-
     serializer_class = ProductSerializer
+
+
+class ProductUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ProductSerializer
+    lookup_field = "pk"
+
+    def get_queryset(self):
+        data = Product.objects.all()
+        return data
+
