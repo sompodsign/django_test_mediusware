@@ -1,7 +1,8 @@
 from django.views import generic
 from django.db.models import Q
 from django.shortcuts import render
-from rest_framework.decorators import APIView
+# from rest_framework.decorators import APIView
+from rest_framework import generics
 from rest_framework.response import Response
 
 from product.models import Variant, Product, ProductVariant
@@ -60,13 +61,7 @@ class ProductListView(generic.ListView):
         return context
 
 
-class ProductCreateView(APIView):
-    http_method_names = ['POST', 'GET']
+class ProductCreateView(generics.ListCreateAPIView):
 
-    def post(self, request):
-        print('somebody')
-        return Response(self.request.body)
+    serializer_class = ProductSerializer
 
-    # def get(self, request):
-    #     products = Product.objects.all()
-    #     return Response(ProductSerializer(products, many=True).data)
