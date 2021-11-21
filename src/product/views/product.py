@@ -5,6 +5,7 @@ from rest_framework.decorators import APIView
 from rest_framework.response import Response
 
 from product.models import Variant, Product, ProductVariant
+from ..serializers import ProductSerializer
 
 
 class CreateProductView(generic.TemplateView):
@@ -60,6 +61,12 @@ class ProductListView(generic.ListView):
 
 
 class ProductCreateView(APIView):
+    http_method_names = ['POST', 'GET']
+
     def post(self, request):
-        print('sompod')
+        print('somebody')
         return Response(self.request.body)
+
+    # def get(self, request):
+    #     products = Product.objects.all()
+    #     return Response(ProductSerializer(products, many=True).data)
